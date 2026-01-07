@@ -154,9 +154,10 @@ npm run start
 Server will run on `http://localhost:3000`.
 
 ## Screenshots
-
+##God Request
 ![Health Check Screenshot](screenshots/safe_req.png)
 
+##Bad Request
 
 ![Bad Check Screenshot](screenshots/bad_req.png)
 
