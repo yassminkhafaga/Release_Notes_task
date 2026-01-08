@@ -75,7 +75,6 @@ if (process.env.OPENAI_API_KEY) {
   };
 
   let parsed: AiResult | null = null;
-
   for (let attempt = 1; attempt <= 2; attempt++) {
     try {
       const aiRaw = await this.aiService.generate(prompt);
