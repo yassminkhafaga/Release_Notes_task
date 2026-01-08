@@ -112,7 +112,7 @@ $body = @{
     )
 } | ConvertTo-Json -Depth 5
 
-# Send POST request to the Release Notes API
+
 Invoke-RestMethod -Uri "https://releasenotestask-production.up.railway.app/api/release-notes" `
     -Method POST `
     -Body $body `
