@@ -131,7 +131,7 @@ Returns:
 * `PORT=3000`
 * `OPENAI_API_KEY=YOUR_KEY_HERE`
 * `OPENAI_MODEL=YOUR_MODEL_HERE`
-* `NODE_ENV=development`
+
 
 ---
 
