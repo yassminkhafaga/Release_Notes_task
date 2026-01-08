@@ -98,6 +98,26 @@ Generates release notes for a given release.
 ## How to Try the API
 
 You can test the `/api/release-notes` endpoint using **Postman** or Windows PowerShell `Invoke-RestMethod`. Example JSON request body is shown above.
+##Example Request (PowerShell)
+# Prepare request body
+
+
+$body = @{
+    version = "1.12.0"
+    date = "2026-02-10"
+    repository = "mdp-web"
+    pullRequests = @(
+        @{ title = "Add forgot password OTP flow"; labels = @("feature","auth"); author = "sara" },
+        @{ title = "Fix transfer validation for empty amount"; labels = @("bugfix","payments"); author = "omar" }
+    )
+} | ConvertTo-Json -Depth 5
+
+# Send POST request to the Release Notes API
+Invoke-RestMethod -Uri "https://releasenotestask-production.up.railway.app/api/release-notes" `
+    -Method POST `
+    -Body $body `
+    -ContentType "application/json"
+    
 
 > Note: Using `curl.exe` on Windows PowerShell requires careful escaping of quotes. Postman is recommended for simplicity.
 
