@@ -11,6 +11,6 @@ export class ReleaseNotesController {
 
     @Post()
     generate(@Body() body: ReleaseNotesDto) {
-        return this.releaseNotesService.generateReleaseNotes(body);
+        return  this.releaseNotesService.generateReleaseNotes(body);
     }
 }

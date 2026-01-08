@@ -69,35 +69,32 @@ if (process.env.OPENAI_API_KEY) {
   console.log('[ReleaseNotesService] Attempting AI generation...');
   const prompt = buildAiPrompt(data.pullRequests);
 
-let aiRaw = ''; // Ai response
-let parsed; //take (Ai response) then parse from JSON to object
+  type AiResult = {
+    highlights: string[];
+    risksAndNotes: string[];
+  };
 
-for (let attempt = 1; attempt <= 2; attempt++) {
-  try {
-    aiRaw = await this.aiService.generate(prompt);
-    console.log('[ReleaseNotesService] AI raw response:', aiRaw);
-    parsed = AiReleaseNotesSchema.parse(JSON.parse(aiRaw));
-    console.log(`[ReleaseNotesService] AI generation successful on attempt ${attempt}`);
-    break; 
-  } catch (error) {
-    console.log(`[ReleaseNotesService] AI parse failed on attempt ${attempt}:`, error.message);
-    if (attempt === 2) {
-      console.log('[ReleaseNotesService] Using fallback after 2 failed attempts');
-      parsed = null; // fallback
-    } else {
-      console.log('[ReleaseNotesService] Retrying AI generation...');
+  let parsed: AiResult | null = null;
+
+  for (let attempt = 1; attempt <= 2; attempt++) {
+    try {
+      const aiRaw = await this.aiService.generate(prompt);
+      parsed = AiReleaseNotesSchema.parse(JSON.parse(aiRaw));
+      console.log(`[ReleaseNotesService] AI success on attempt ${attempt}`);
+      break;
+    } catch (error) {
+      console.log(`[ReleaseNotesService] Attempt ${attempt} failed`);
     }
   }
+
+  if (parsed) {
+    aiHighlights = parsed.highlights;
+    aiRisks = parsed.risksAndNotes;
+  }
+} else {
+  console.log('[ReleaseNotesService] OPENAI_API_KEY not found, using fallback.');
 }
 
-// fallback
-if (parsed) {
-  aiHighlights = parsed.highlights;
-  aiRisks = parsed.risksAndNotes;
-} else {
-  aiHighlights = highlights;
-  aiRisks = risksAndNotes;
-}
 
   // return 
   return {
@@ -111,7 +108,7 @@ if (parsed) {
     risksAndNotes: aiRisks,
     markdown,
   };
-}
+
 }
 ////////////////////////////////////////
 
